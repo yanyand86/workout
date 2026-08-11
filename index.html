@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ten Lengths — 11–20 August</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --deep:#07242A; --tile:#0E3A42; --tile-2:#12484F; --aqua:#3FCFB6;
+  --aqua-dim:#1E7E76; --foam:#E9F5F2; --muted:#7CA5A6; --amber:#E8A33D;
+  --rose:#D96A6A; --rule:rgba(63,207,182,.16);
+  --shadow:0 1px 0 rgba(255,255,255,.04), 0 10px 30px -18px rgba(0,0,0,.9);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  background:var(--deep);color:var(--foam);
+  font-family:"Public Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;padding:0 0 64px;
+  background-image:radial-gradient(120% 60% at 50% -10%, rgba(63,207,182,.10), transparent 60%);
+}
+.wrap{max-width:640px;margin:0 auto;padding:0 20px}
+h1,h2,h3,h4{font-family:"Barlow Condensed","Public Sans",sans-serif;text-transform:uppercase;letter-spacing:.02em;margin:0}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+
+/* hero */
+.hero{padding:38px 0 26px}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:11px;letter-spacing:.22em;
+  text-transform:uppercase;color:var(--aqua);margin:0 0 14px}
+.hero h1{font-size:clamp(52px,17vw,84px);line-height:.86;font-weight:700}
+.hero h1 em{font-style:normal;color:var(--aqua);display:block}
+.hero p{color:var(--muted);margin:14px 0 0;max-width:34ch;font-size:15px}
+
+/* lane */
+.lane{margin:30px 0 6px}
+.lane-track{position:relative;height:64px;border-radius:6px;display:flex;overflow:hidden;
+  background:linear-gradient(180deg,var(--tile),var(--tile-2));border:1px solid var(--rule)}
+.lane-track::after{content:"";position:absolute;left:0;right:26px;top:50%;height:8px;transform:translateY(-50%);
+  background:repeating-linear-gradient(90deg,rgba(4,20,24,.85) 0 26px,transparent 26px 40px)}
+.lane-end{position:absolute;right:10px;top:12px;bottom:12px;width:8px;background:var(--amber);border-radius:2px}
+.seg{flex:1;position:relative;border-right:1px solid rgba(4,20,24,.35);z-index:2}
+.seg:last-of-type{border-right:none}
+.seg.done{background:linear-gradient(180deg,rgba(63,207,182,.42),rgba(63,207,182,.16))}
+.seg.today::before{content:"";position:absolute;inset:0;border-top:3px solid var(--aqua);border-bottom:3px solid var(--aqua)}
+.lane-meta{display:flex;justify-content:space-between;margin-top:10px;font-family:"IBM Plex Mono",monospace;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.lane-meta b{color:var(--aqua);font-weight:500}
+
+/* sections */
+section{margin-top:44px}
+.sec-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px}
+.sec-head h2{font-size:26px;font-weight:600}
+.sec-head span{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.2em;color:var(--aqua);text-transform:uppercase}
+.sec-sub{color:var(--muted);font-size:14px;margin:0 0 18px}
+
+.card{background:var(--tile);border:1px solid var(--rule);border-radius:10px;padding:18px;box-shadow:var(--shadow)}
+.card+.card{margin-top:12px}
+
+/* checkboxes */
+.chk{display:flex;align-items:flex-start;gap:12px;padding:11px 4px;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.05)}
+.chk:last-child{border-bottom:none}
+.chk input{position:absolute;opacity:0;width:0;height:0}
+.box{flex:0 0 20px;height:20px;margin-top:2px;border:1.5px solid var(--aqua-dim);border-radius:4px;
+  display:grid;place-items:center;transition:background .15s,border-color .15s}
+.box svg{width:12px;height:12px;opacity:0;transform:scale(.6);transition:opacity .15s,transform .15s}
+.chk input:checked~.box{background:var(--aqua);border-color:var(--aqua)}
+.chk input:checked~.box svg{opacity:1;transform:scale(1)}
+.chk input:focus-visible~.box{outline:2px solid var(--foam);outline-offset:2px}
+.chk-txt{flex:1}
+.chk-txt b{display:block;font-weight:600;font-size:15px}
+.chk-txt small{color:var(--muted);font-size:13px;display:block;line-height:1.4}
+.chk input:checked~.chk-txt b{color:var(--muted);text-decoration:line-through}
+
+/* day accordion */
+.day{border:1px solid var(--rule);border-radius:10px;background:var(--tile);margin-bottom:10px;overflow:hidden;box-shadow:var(--shadow)}
+.day.is-today{border-color:var(--aqua)}
+.day-btn{width:100%;background:none;border:none;color:inherit;text-align:left;display:flex;
+  align-items:center;gap:14px;padding:15px 16px;cursor:pointer;font:inherit}
+.day-btn:focus-visible{outline:2px solid var(--aqua);outline-offset:-2px}
+.day-n{font-family:"IBM Plex Mono",monospace;font-size:12px;color:var(--aqua);border:1px solid var(--aqua-dim);
+  border-radius:4px;padding:4px 7px;flex:0 0 auto}
+.day.done .day-n{background:var(--aqua);color:var(--deep);border-color:var(--aqua)}
+.day-info{flex:1;min-width:0}
+.day-info .d{font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase}
+.day-info .t{font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;font-size:20px;font-weight:600;line-height:1.1}
+.caret{flex:0 0 auto;color:var(--muted);transition:transform .2s}
+.day.open .caret{transform:rotate(180deg)}
+.day-body{display:none;padding:0 16px 16px;border-top:1px solid var(--rule)}
+.day.open .day-body{display:block}
+.blk{margin-top:14px}
+.blk h4{margin:0 0 4px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--aqua);font-weight:500}
+
+/* exercise rows */
+.ex{border-bottom:1px dotted rgba(255,255,255,.09)}
+.ex:last-child{border-bottom:none}
+.ex-btn{width:100%;background:none;border:none;color:inherit;font:inherit;text-align:left;cursor:pointer;
+  display:flex;align-items:center;gap:10px;padding:10px 0}
+.ex-btn:focus-visible{outline:2px solid var(--aqua);outline-offset:-2px;border-radius:4px}
+.ex-name{flex:1;font-size:15px}
+.ex-dose{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--aqua);flex:0 0 auto;white-space:nowrap}
+.ex-i{flex:0 0 auto;width:17px;height:17px;border-radius:50%;border:1px solid var(--aqua-dim);color:var(--aqua);
+  font-family:"IBM Plex Mono",monospace;font-size:10px;display:grid;place-items:center;transition:background .15s,color .15s}
+.ex.open .ex-i{background:var(--aqua);color:var(--deep);border-color:var(--aqua)}
+.ex-detail{display:none;padding:0 0 16px}
+.ex.open .ex-detail{display:block}
+.demo{background:rgba(4,20,24,.45);border:1px solid var(--rule);border-radius:8px;margin-bottom:12px;position:relative}
+.demo svg{display:block;width:100%;height:auto}
+.demo-tag{position:absolute;top:8px;left:10px;font-family:"IBM Plex Mono",monospace;font-size:9px;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--aqua-dim)}
+ol.cues{margin:0;padding-left:20px;font-size:14.5px}
+ol.cues li{margin-bottom:6px;padding-left:2px}
+ol.cues li::marker{color:var(--aqua);font-family:"IBM Plex Mono",monospace;font-size:12px}
+.avoid{margin:12px 0 0;font-size:13.5px;color:var(--muted);padding-left:12px;border-left:2px solid var(--rose)}
+.avoid b{color:var(--rose);font-weight:600}
+
+.note{font-size:13px;color:var(--muted);margin:12px 0 0;padding-left:12px;border-left:2px solid var(--aqua-dim)}
+.mark{width:100%;margin-top:16px;padding:12px;border-radius:8px;font:inherit;cursor:pointer;
+  font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.06em;font-size:16px;font-weight:600;
+  background:transparent;border:1.5px solid var(--aqua-dim);color:var(--aqua)}
+.day.done .mark{background:var(--aqua);border-color:var(--aqua);color:var(--deep)}
+.mark:focus-visible{outline:2px solid var(--foam);outline-offset:2px}
+
+/* how to run a session */
+.steps{counter-reset:s;margin:0;padding:0;list-style:none}
+.steps li{counter-increment:s;display:flex;gap:12px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14.5px}
+.steps li:last-child{border-bottom:none}
+.steps li::before{content:counter(s,decimal-leading-zero);font-family:"IBM Plex Mono",monospace;font-size:11px;
+  color:var(--aqua);flex:0 0 auto;padding-top:3px}
+
+/* plate */
+.plate-fig{display:block;margin:0 auto 4px;width:100%;max-width:240px;height:auto}
+@keyframes sweep{0%,4%{stroke-dashoffset:var(--len)}22%,92%{stroke-dashoffset:0}100%{stroke-dashoffset:var(--len)}}
+@keyframes fadein{0%,10%{opacity:0}26%,92%{opacity:1}100%{opacity:0}}
+.wedge{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);animation:sweep 9s var(--d) infinite}
+.wlab{opacity:0;animation:fadein 9s var(--d) infinite}
+.legend{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin-top:6px;font-size:13px;color:var(--muted)}
+.legend i{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:6px}
+
+/* hands */
+.hands{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(min-width:520px){.hands{grid-template-columns:repeat(4,1fr)}}
+.hand{text-align:center}
+.hand svg{width:100%;max-width:82px;height:auto}
+@keyframes pulse{0%,70%,100%{transform:scale(1)}80%{transform:scale(1.07)}}
+.hand svg g{transform-origin:50% 50%;animation:pulse 4s var(--d) infinite}
+.hand b{display:block;font-family:"Barlow Condensed",sans-serif;text-transform:uppercase;font-size:15px;
+  font-weight:600;margin-top:4px;letter-spacing:.03em}
+.hand small{display:block;color:var(--muted);font-size:12.5px;line-height:1.35}
+
+/* water */
+.glasses{display:flex;gap:8px;justify-content:space-between;margin-top:4px}
+.glasses svg{flex:1;max-width:52px;height:auto}
+@keyframes fill{0%,5%{transform:scaleY(0)}30%,90%{transform:scaleY(1)}100%{transform:scaleY(0)}}
+.water{transform-origin:50% 100%;animation:fill 8s var(--d) infinite}
+
+/* food tags */
+.food h3{font-size:19px;font-weight:600;margin-bottom:8px;display:flex;align-items:center;gap:9px}
+.dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+.go .dot{background:var(--aqua)} .care .dot{background:var(--amber)} .stop .dot{background:var(--rose)}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.tag{font-size:13px;padding:5px 10px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08)}
+.go .tag{border-color:rgba(63,207,182,.3)}
+.care .tag{border-color:rgba(232,163,61,.3)}
+.stop .tag{border-color:rgba(217,106,106,.3);color:var(--muted)}
+
+.meal{display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14.5px}
+.meal:last-child{border-bottom:none}
+.meal b{flex:0 0 74px;font-family:"IBM Plex Mono",monospace;font-size:10px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--aqua);font-weight:500;padding-top:4px}
+
+.caution{border-color:rgba(232,163,61,.35);background:rgba(232,163,61,.07)}
+.caution h3{color:var(--amber);font-size:19px;margin-bottom:8px}
+.caution p{margin:0;font-size:14.5px}
+
+/* thoracic */
+.spine-fig{display:block;margin:6px auto 18px;width:100%;max-width:280px;height:auto}
+.row2{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px dotted rgba(255,255,255,.09);font-size:15px}
+.row2:last-of-type{border-bottom:none}
+.row2 span:last-child{font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--aqua);flex:0 0 auto;white-space:nowrap}
+
+footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--rule);color:var(--muted);font-size:13px}
+.reset{background:none;border:none;color:var(--muted);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;padding:8px 0}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.wedge{stroke-dashoffset:0}.wlab{opacity:1}.water{transform:scaleY(1)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">Stevenage · 11 → 20 August</p>
+    <h1>Ten<em>Lengths</em></h1>
+    <p>Ten days, ten sessions, one flight. Small deficit, low salt, tall ribs. Tap any exercise to see how it moves.</p>
+    <div class="lane">
+      <div class="lane-track" id="lane" aria-hidden="true"><div class="lane-end"></div></div>
+      <div class="lane-meta">
+        <span>Push off · 11 Aug</span><span><b id="left">10</b> to go</span><span>Wall · 21 Aug</span>
+      </div>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-head"><h2>Every day</h2><span>non-negotiable</span></div>
+    <p class="sec-sub">These four move the needle more than any single session. Resets each morning.</p>
+    <div class="card" id="four"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Run the session</h2><span>same every time</span></div>
+    <p class="sec-sub">The structure doesn't change — only the exercises do.</p>
+    <div class="card">
+      <ol class="steps">
+        <li>Five minutes on a bike or rower to raise the temperature, then ten squats, ten press-ups, ten band pull-aparts.</li>
+        <li>First set of each exercise is a feeler at about 60% of your working weight. It doesn't count.</li>
+        <li>Working sets stop two reps short of failure. You should believe you could do two more, every set.</li>
+        <li>Rest 60–75 seconds. Set a timer — everyone drifts to three minutes without one.</li>
+        <li>Same weight all sets. If the last set feels easy, add weight next session, not this one.</li>
+        <li>Finish with the ten-minute thoracic block. Don't skip it because you're hungry.</li>
+      </ol>
+      <p class="note">Whole thing should take 45–55 minutes. If it's running past an hour you're resting too long, not working too hard.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>The sessions</h2><span>tap to open</span></div>
+    <p class="sec-sub">Every exercise opens to a moving demo, four cues, and the one thing to avoid.</p>
+    <div id="days"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Build the plate</h2><span>no counting</span></div>
+    <p class="sec-sub">Rules, not calories. Every main meal gets built in this order — veg first, then protein, then the starch.</p>
+
+    <div class="card">
+      <svg class="plate-fig" viewBox="0 0 200 200" role="img" aria-label="Plate divided into a half of vegetables, a quarter of protein and a quarter of starchy carbohydrate">
+        <circle cx="100" cy="100" r="76" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.12)" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="63" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="1"/>
+        <!-- half: veg (180deg of r=32 circle -> dash on stroke width 64) -->
+        <circle class="wedge" style="--len:100.5;--d:0s" cx="100" cy="100" r="32" fill="none"
+                stroke="#3FCFB6" stroke-width="62" stroke-dasharray="100.5 201" transform="rotate(-90 100 100)" opacity=".55"/>
+        <!-- quarter: protein -->
+        <circle class="wedge" style="--len:50.3;--d:1.1s" cx="100" cy="100" r="32" fill="none"
+                stroke="#E8A33D" stroke-width="62" stroke-dasharray="50.3 201" transform="rotate(180 100 100)" opacity=".55"/>
+        <!-- quarter: starch -->
+        <circle class="wedge" style="--len:50.3;--d:2.2s" cx="100" cy="100" r="32" fill="none"
+                stroke="#E9F5F2" stroke-width="62" stroke-dasharray="50.3 201" transform="rotate(90 100 100)" opacity=".38"/>
+        <line x1="100" y1="34" x2="100" y2="166" stroke="#07242A" stroke-width="2"/>
+        <line x1="100" y1="100" x2="34" y2="100" stroke="#07242A" stroke-width="2"/>
+        <text class="wlab" style="--d:0s" x="138" y="104" text-anchor="middle" font-family="Barlow Condensed" font-size="15" fill="#07242A" letter-spacing="1">VEG</text>
+        <text class="wlab" style="--d:1.1s" x="66" y="72" text-anchor="middle" font-family="Barlow Condensed" font-size="13" fill="#07242A" letter-spacing="1">PROTEIN</text>
+        <text class="wlab" style="--d:2.2s" x="66" y="136" text-anchor="middle" font-family="Barlow Condensed" font-size="13" fill="#07242A" letter-spacing="1">STARCH</text>
+      </svg>
+      <div class="legend">
+        <span><i style="background:#3FCFB6"></i>Half the plate, cooked veg</span>
+        <span><i style="background:#E8A33D"></i>A quarter, protein</span>
+        <span><i style="background:#E9F5F2"></i>A quarter, rice or potato</span>
+      </div>
+      <p class="note">Fill the veg half first and eat it first. You'll finish the meal satisfied on noticeably less of everything else, without weighing a thing.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:4px">Portions, measured by hand</h3>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 14px">Your hand scales with you, so it's a better guide than a chart. One of each per main meal.</p>
+      <div class="hands">
+        <div class="hand">
+          <svg viewBox="0 0 60 66" role="img" aria-label="Flat palm">
+            <g fill="none" stroke="#3FCFB6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 30 v-16 a3.5 3.5 0 0 1 7 0 v14"/><path d="M23 28 v-19 a3.5 3.5 0 0 1 7 0 v18"/>
+              <path d="M30 27 v-18 a3.5 3.5 0 0 1 7 0 v18"/><path d="M37 29 v-14 a3.5 3.5 0 0 1 7 0 v16"/>
+              <path d="M16 32 a4 4 0 0 0 -8 4 l6 10"/>
+              <path d="M14 46 a16 16 0 0 0 30 -8 v-8"/>
+            </g>
+          </svg>
+          <b>Palm</b><small>Protein — chicken, fish, tofu, eggs</small>
+        </div>
+        <div class="hand">
+          <svg viewBox="0 0 60 66" style="--d:.5s" role="img" aria-label="Closed fist">
+            <g fill="none" stroke="#3FCFB6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 26 a16 16 0 0 1 32 0 v14 a14 14 0 0 1 -28 0 z"/>
+              <path d="M20 26 h20 M20 34 h20"/><path d="M46 30 a5 5 0 0 1 6 6 l-6 6"/>
+            </g>
+          </svg>
+          <b>Fist</b><small>Veg — at least one, ideally two</small>
+        </div>
+        <div class="hand">
+          <svg viewBox="0 0 60 66" style="--d:1s" role="img" aria-label="Cupped hand">
+            <g fill="none" stroke="#E9F5F2" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 24 a20 20 0 0 0 20 26 a20 20 0 0 0 18 -22"/>
+              <path d="M12 24 a5 5 0 0 1 8 -4"/><path d="M50 28 a5 5 0 0 0 -8 -4"/>
+              <path d="M20 20 q12 -8 22 4" stroke-dasharray="3 4"/>
+            </g>
+          </svg>
+          <b>Cupped hand</b><small>Rice, potato, oats — one, not two</small>
+        </div>
+        <div class="hand">
+          <svg viewBox="0 0 60 66" style="--d:1.5s" role="img" aria-label="Thumb">
+            <g fill="none" stroke="#E8A33D" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M24 50 v-22 a8 8 0 0 1 16 0 v22 a8 8 0 0 1 -16 0 z"/>
+              <path d="M24 36 h16"/>
+            </g>
+          </svg>
+          <b>Thumb</b><small>Fats — oil, nuts, cheese. Easy to overshoot</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:4px">Roughly three litres</h3>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 12px">Six pint glasses across the day. Two before you leave the house.</p>
+      <div class="glasses" aria-label="Six glasses filling through the day">
+        <svg viewBox="0 0 30 46" role="img" aria-label="On waking"><rect x="4" y="4" width="22" height="38" rx="3" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.6"/><rect class="water" style="--d:0s" x="6" y="6" width="18" height="34" rx="2" fill="#3FCFB6" opacity=".5"/></svg>
+        <svg viewBox="0 0 30 46"><rect x="4" y="4" width="22" height="38" rx="3" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.6"/><rect class="water" style="--d:.4s" x="6" y="6" width="18" height="34" rx="2" fill="#3FCFB6" opacity=".5"/></svg>
+        <svg viewBox="0 0 30 46"><rect x="4" y="4" width="22" height="38" rx="3" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.6"/><rect class="water" style="--d:.8s" x="6" y="6" width="18" height="34" rx="2" fill="#3FCFB6" opacity=".5"/></svg>
+        <svg viewBox="0 0 30 46"><rect x="4" y="4" width="22" height="38" rx="3" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.6"/><rect class="water" style="--d:1.2s" x="6" y="6" width="18" height="34" rx="2" fill="#3FCFB6" opacity=".5"/></svg>
+        <svg viewBox="0 0 30 46"><rect x="4" y="4" width="22" height="38" rx="3" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.6"/><rect class="water" style="--d:1.6s" x="6" y="6" width="18" height="34" rx="2" fill="#3FCFB6" opacity=".5"/></svg>
+        <svg viewBox="0 0 30 46"><rect x="4" y="4" width="22" height="38" rx="3" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="1.6"/><rect class="water" style="--d:2s" x="6" y="6" width="18" height="34" rx="2" fill="#3FCFB6" opacity=".5"/></svg>
+      </div>
+      <p class="note">Stop drinking heavily after about 8pm so it doesn't wreck your sleep — the last glass earlier in the evening.</p>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:19px;margin-bottom:10px">A day that works</h3>
+      <div class="meal"><b>Waking</b><span>Pint of water. Vacuums before anything else passes your lips.</span></div>
+      <div class="meal"><b>Breakfast</b><span>Skyr or Greek yoghurt with berries and oats, or three eggs with tomatoes and a slice of sourdough. Coffee is fine.</span></div>
+      <div class="meal"><b>Lunch</b><span>Palm of chicken or fish, two fists of cooked veg, a cupped hand of rice. Lemon and pepper instead of sauce.</span></div>
+      <div class="meal"><b>Snack</b><span>Only if actually hungry — cherries, an apple, or a small pot of cottage cheese.</span></div>
+      <div class="meal"><b>Dinner</b><span>Same plate as lunch, lighter on the starch. Eat by 8pm so you're not going to bed on a full stomach.</span></div>
+      <div class="meal"><b>Shifts</b><span>Take it in a box. The unit vending machine and the canteen will both cost you the whole day's salt budget.</span></div>
+    </div>
+
+    <div class="card food go"><h3><span class="dot"></span>Fill the plate</h3>
+      <div class="tags"><span class="tag">Eggs</span><span class="tag">Chicken</span><span class="tag">White fish</span>
+      <span class="tag">Tofu</span><span class="tag">Skyr &amp; low-fat dairy</span><span class="tag">Cooked veg</span>
+      <span class="tag">Rice</span><span class="tag">Potatoes</span><span class="tag">Oats</span>
+      <span class="tag">Berries</span><span class="tag">Cherries</span><span class="tag">Coffee</span><span class="tag">Water</span></div></div>
+
+    <div class="card food care"><h3><span class="dot"></span>Small portions only</h3>
+      <div class="tags"><span class="tag">Red meat</span><span class="tag">Cheese</span><span class="tag">Bread</span>
+      <span class="tag">Salted nuts</span><span class="tag">Sauces &amp; condiments</span><span class="tag">Big raw salads</span>
+      <span class="tag">Water kefir</span></div></div>
+
+    <div class="card food stop"><h3><span class="dot"></span>Park until the 21st</h3>
+      <div class="tags"><span class="tag">Beer</span><span class="tag">Takeaways</span><span class="tag">Ready meals</span>
+      <span class="tag">Crisps</span><span class="tag">Processed meat</span><span class="tag">Shellfish</span>
+      <span class="tag">Sardines &amp; mackerel</span><span class="tag">Sugary drinks</span></div></div>
+
+    <div class="card caution"><h3>Don't overdo the deficit</h3>
+      <p>Eat a bit less, not a lot less — and don't fast. Rapid weight loss and dehydration both push urate up, and a gout flare on day two of the holiday costs you far more than a slightly softer stomach. If a joint starts niggling, eat normally and drink more.</p></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Thoracic extension</h2><span>free inches</span></div>
+    <p class="sec-sub">Your thoracic spine is the middle twelve vertebrae — the ones your ribs hang off. Extension is arching back through that section.</p>
+    <div class="card">
+      <svg class="spine-fig" viewBox="0 0 240 190" role="img" aria-label="Rounded posture beside stacked posture, with the thoracic section highlighted">
+        <g fill="none" stroke="#7CA5A6" stroke-width="2.4" stroke-linecap="round">
+          <path d="M44 24 C 34 46, 30 70, 40 92"/><path d="M40 92 C 46 112, 48 132, 44 152"/><circle cx="50" cy="14" r="9"/>
+        </g>
+        <path d="M44 24 C 34 46, 30 70, 40 92" fill="none" stroke="#7CA5A6" stroke-width="7" stroke-linecap="round" opacity=".2"/>
+        <text x="14" y="176" font-family="IBM Plex Mono, monospace" font-size="10" fill="#7CA5A6" letter-spacing="1.5">ROUNDED</text>
+        <path d="M96 92 C 116 78, 128 78, 146 92" fill="none" stroke="#3FCFB6" stroke-width="2" stroke-dasharray="4 4"/>
+        <path d="M146 92 l-8 -6 M146 92 l-8 6" fill="none" stroke="#3FCFB6" stroke-width="2" stroke-linecap="round"/>
+        <g fill="none" stroke="#E9F5F2" stroke-width="2.4" stroke-linecap="round">
+          <path d="M196 24 C 192 46, 190 70, 194 92"/><path d="M194 92 C 198 112, 200 132, 194 152"/><circle cx="198" cy="14" r="9"/>
+        </g>
+        <path d="M196 24 C 192 46, 190 70, 194 92" fill="none" stroke="#3FCFB6" stroke-width="7" stroke-linecap="round" opacity=".45"/>
+        <text x="166" y="176" font-family="IBM Plex Mono, monospace" font-size="10" fill="#3FCFB6" letter-spacing="1.5">STACKED</text>
+      </svg>
+      <p style="margin:0;font-size:15px">Sitting, driving and pressing all pull you into the shape on the left. When the upper back rounds, the ribcage tips down toward the pelvis, the abdominal wall slackens and the front of you folds forward — a soft roll appears without a single gram of extra fat. Open the mid-back and the ribs stack over the hips, the waist lengthens, the stomach flattens.</p>
+      <p class="note">The cue isn't "shoulders back." It's <b>tall ribs over hips</b> — grow through the sternum and let the shoulders sit where they land.</p>
+    </div>
+    <div class="card" style="margin-top:12px" id="thoracic"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Last 72 hours</h2><span>18 → 21 Aug</span></div>
+    <p class="sec-sub">Nothing new, nothing heavy, nothing fizzy. This window is about what leaves the gut, not what burns off.</p>
+    <div class="card">
+      <div class="row2"><span>Cooked veg instead of big raw salads</span><span>less residue</span></div>
+      <div class="row2"><span>Ease off onion, garlic, brassicas, beans, lentils</span><span>less gas</span></div>
+      <div class="row2"><span>Halve the water kefir if you drink it daily</span><span>less fizz</span></div>
+      <div class="row2"><span>Zero alcohol — beer especially</span><span>both counts</span></div>
+      <div class="row2"><span>Keep the water high, don't taper it</span><span>3L</span></div>
+      <div class="row2"><span>No restaurant blowout the night before</span><span>salt bomb</span></div>
+      <div class="row2"><span>Last session Thursday is a walk, not a lift</span><span>no DOMS</span></div>
+      <p class="note">Heavy training in the final 48 hours leaves the abdominal wall inflamed and holding water — exactly the opposite of what you want on the beach. Back off and let it settle.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>Realistic outcome by the 21st: around half a kilo to a kilo of actual fat, one to two kilos of water, and a noticeably flatter, tighter-looking midsection. The look changes more than the scale does.</p>
+    <button class="reset" id="reset">Clear all ticks and start again</button>
+  </footer>
+</div>
+
+<script>
+/* ============ figure engine ============ */
+const SEG={th:17,sh:17,to:21,up:12,fo:11,ft:8,hd:8.5,hr:5};
+const RAD=Math.PI/180;
+const at=(p,a,l)=>[p[0]+Math.cos(a*RAD)*l,p[1]+Math.sin(a*RAD)*l];
+
+function solve(a){
+  const hip=[50,50];
+  const kn=at(hip,a.th??90,SEG.th), an=at(kn,a.sh??90,SEG.sh), tp=at(an,a.ft??0,SEG.ft);
+  const sh=at(hip,a.to??-90,SEG.to), hd=at(sh,a.hd??a.to??-90,SEG.hd);
+  const el=at(sh,a.up??90,SEG.up), wr=at(el,a.fo??90,SEG.fo);
+  const J={hip,kn,an,tp,sh,hd,el,wr,belly:a.belly??0};
+  if(a.th2!=null){J.kn2=at(hip,a.th2,SEG.th);J.an2=at(J.kn2,a.sh2??90,SEG.sh);J.tp2=at(J.an2,a.ft2??0,SEG.ft);}
+  if(a.up2!=null){J.el2=at(sh,a.up2,SEG.up);J.wr2=at(J.el2,a.fo2??90,SEG.fo);}
+  return J;
+}
+function snap(J,c){
+  if(!c)return J;
+  const p=J[c[0]]; if(!p)return J;
+  const dx=(c[1]==null?p[0]:c[1])-p[0], dy=(c[2]==null?p[1]:c[2])-p[1];
+  for(const k in J) if(Array.isArray(J[k])) J[k]=[J[k][0]+dx,J[k][1]+dy];
+  return J;
+}
+function blend(f1,f2,t){
+  const o={}, keys=new Set([...Object.keys(f1),...Object.keys(f2)]);
+  keys.forEach(k=>{const a=f1[k],b=f2[k];o[k]=(a==null?b:(b==null?a:a+(b-a)*t));});
+  return o;
+}
+const P=p=>p[0].toFixed(1)+','+p[1].toFixed(1);
+
+/* ============ exercise library ============ */
+/* th hip>knee · sh knee>ankle · ft ankle>toe · to hip>shoulder · hd shoulder>head
+   up shoulder>elbow · fo elbow>wrist · *2 far limb · belly 0-1                    */
+const LIB={
+squat:{n:'Goblet squat',ms:3000,contact:['an',50,84],vb:'13 14 74 79',props:{floor:85,kb:1},
+ f:[{th:90,sh:90,to:-90,up:105,fo:-45},{th:26,sh:117,to:-72,up:110,fo:-40}],
+ c:['Weight held against the chest, elbows tucked in tight.','Sit straight down between the hips — let the knees travel forward over the toes.','Go as deep as you can keep a flat back and heels down.','Stand up by driving the floor away, and squeeze the glutes at the top.'],
+ a:'Chest folding forward on the way up. If it does, the weight is too heavy — drop it and keep the reps clean.'},
+
+rdl:{n:'Romanian deadlift',ms:3200,contact:['an',50,84],vb:'13 14 74 79',props:{floor:85,db:1},
+ f:[{th:90,sh:90,to:-90,up:90,fo:90},{th:70,sh:100,to:-18,up:90,fo:90}],
+ c:['Soft knees, then push the hips backwards — this is a hinge, not a squat.','Weights stay in contact with the front of the thighs the whole way down.','Stop when you feel a strong stretch in the hamstrings, roughly mid-shin.','Drive the hips forward to stand, ribs down, glutes tight at the top.'],
+ a:'Rounding the lower back to reach further down. Range comes from the hamstrings, not the spine.'},
+
+pushup:{n:'Press-up',ms:2800,contact:['wr',66,84],vb:'4 52 83 40',props:{floor:85},
+ f:[{th:163,sh:163,ft:80,to:-17,up:85,fo:92},{th:176,sh:176,ft:95,to:-6,up:150,fo:30}],
+ c:['Hands slightly wider than the shoulders, fingers spread.','Squeeze the glutes and brace the stomach so the body is one rigid plank.','Elbows travel back at about 45 degrees, not straight out sideways.','Chest to just above the floor, then push the floor away.'],
+ a:'Hips sagging or the head poking forward. Both mean the brace has gone — stop the set there.'},
+
+bench:{n:'Dumbbell bench press',ms:3000,contact:['hip',50,66],vb:'13 36 78 57',props:{floor:86,bench:[44,70,40,7],db:1},
+ f:[{th:170,sh:88,to:0,hd:0,up:-170,fo:-70},{th:170,sh:88,to:0,hd:0,up:-90,fo:-90}],
+ c:['Feet flat on the floor, a small natural arch in the lower back.','Lower under control until the dumbbells are level with the chest.','Elbows at roughly 45 degrees from the body, not flared to 90.','Press up and very slightly together, without clashing the bells.'],
+ a:'Bouncing the weights off the chest, or dropping the last rep. Stop with two clean reps left.'},
+
+row:{n:'Seated cable row',ms:3000,contact:null,vb:'27 14 74 54',props:{cable:[94,44],seat:[34,52,34,6],bench:[84,44,6,16]},
+ f:[{th:2,sh:12,ft:-60,to:-84,up:-4,fo:-4},{th:2,sh:12,ft:-60,to:-90,up:166,fo:-25}],
+ c:['Sit tall with a slight forward lean, chest up, knees softly bent.','Start by pulling the shoulder blades back and down, then bend the elbows.','Handle comes to the bottom of the ribs, elbows brushing past the body.','Let it stretch all the way out at the front without slumping.'],
+ a:'Rocking backwards to move the weight. Keep the torso still — the arms and back do the work.'},
+
+hipthrust:{n:'Hip thrust',ms:3000,contact:['an',70,84],vb:'9 51 78 41',props:{floor:85,bench:[16,58,34,7]},
+ f:[{th:-37,sh:67,to:-135,up:160,fo:-30},{th:8,sh:82,to:-169,up:160,fo:-30}],
+ c:['Shoulder blades on the bench edge, feet flat, shins vertical at the top.','Tuck the ribs down and the pelvis under before you lift — this is the whole exercise.','Drive through the heels until the body is a straight line from knee to shoulder.','Squeeze hard for a full second at the top, then lower under control.'],
+ a:'Arching the lower back to get higher. Height comes from the glutes, not the spine.'},
+
+carry:{n:"Farmer's carry",ms:1400,contact:['an',50,84],vb:'13 14 74 78',props:{floor:85,db:1,db2:1},
+ f:[{th:100,sh:85,th2:75,sh2:95,to:-90,up:88,fo:90,up2:92,fo2:90},
+    {th:75,sh:95,th2:100,sh2:85,to:-90,up:92,fo:90,up2:88,fo2:90}],
+ c:['Heavy dumbbells at your sides, arms locked straight, shoulders pulled down.','Ribs stacked over the hips — walk tall, not leaning back.','Short, controlled steps. Do not let the weights swing.','Walk 40 metres, set them down, rest, repeat.'],
+ a:'Shrugging up into the neck. Think long arms and a long neck, weight hanging off the lats.'},
+
+deadbug:{n:'Dead bug',ms:3400,contact:null,vb:'0 18 98 47',props:{floor:55},
+ f:[{th:-80,sh:0,to:180,hd:180,up:-80,fo:-80,th2:-80,sh2:0,up2:-80,fo2:-80},
+    {th:-20,sh:-10,to:180,hd:180,up:-160,fo:-170,th2:-80,sh2:0,up2:-80,fo2:-80}],
+ c:['On your back, knees and hips at 90 degrees, arms straight up over the shoulders.','Press the lower back flat into the floor and keep it there the entire set.','Slowly reach the opposite arm and leg away, breathing out as you extend.','Return under control, then swap sides. Slow beats big range.'],
+ a:'The lower back lifting off the floor. The moment it arches, you have gone too far — shorten the reach.'},
+
+sideplank:{n:'Side plank',ms:3600,contact:['el',26,58],vb:'9 33 84 40',props:{floor:60},
+ f:[{th:10,sh:10,ft:30,to:-165,hd:-168,up:80,fo:10},
+    {th:7,sh:8,ft:30,to:-168,hd:-170,up:80,fo:10}],
+ c:['Elbow directly under the shoulder, feet stacked or staggered.','Lift the hips until the body is one straight line from ankle to ear.','Push the bottom shoulder away from the ear and reach the top hand at the ceiling.','Breathe normally throughout — if you are holding your breath, drop the time.'],
+ a:'The hips drifting backwards or sagging toward the floor. Quality time beats long time.'},
+
+pallof:{n:'Pallof press',ms:3000,contact:['an',50,84],vb:'-1 14 88 79',props:{floor:85,cable:[6,42]},
+ f:[{th:90,sh:90,to:-90,up:60,fo:-50},{th:90,sh:90,to:-90,up:5,fo:0}],
+ c:['Stand side-on to the cable, feet hip-width, hands clasped at the sternum.','Brace the stomach hard — the cable is trying to twist you and you refuse.','Press the hands straight out in front, ribs down, hips square to the front.','Hold two seconds at full reach, then bring it back to the chest.'],
+ a:'Letting the torso rotate toward the cable. Step further away if you cannot stay square.'},
+
+kneeraise:{n:'Hanging knee raise',ms:3000,contact:['wr',50,14],vb:'9 5 82 94',props:{bar:12},
+ f:[{th:90,sh:90,th2:93,sh2:93,to:-90,up:-90,fo:-90},{th:-20,sh:80,th2:-16,sh2:84,to:-90,up:-90,fo:-90}],
+ c:['Hang from the bar, shoulders pulled down and away from the ears.','Tilt the pelvis up first, then bring the knees toward the chest.','Stop the swing completely at the bottom of every rep.','Lower slowly — the way down is where the work happens.'],
+ a:'Swinging up with momentum. If you are rocking, do it with your back against a wall instead.'},
+
+press:{n:'Dumbbell shoulder press',ms:2800,contact:['an',50,84],vb:'10 -1 81 93',props:{floor:85,db:1},
+ f:[{th:90,sh:90,to:-90,up:150,fo:-80},{th:90,sh:90,to:-90,up:-85,fo:-90}],
+ c:['Start with the dumbbells at shoulder height, palms facing forward.','Squeeze the glutes and pull the ribs down so you do not lean back.','Press up and slightly in until the arms lock out over the ears.','Lower all the way to the shoulders each rep.'],
+ a:'Turning it into a standing incline press by arching backwards. Ribs stay down.'},
+
+vacuum:{n:'Stomach vacuum',ms:4200,contact:['an',50,84],vb:'13 14 74 79',props:{floor:85},
+ f:[{th:90,sh:90,to:-90,up:100,fo:100,belly:0},{th:90,sh:90,to:-90,up:100,fo:100,belly:1}],
+ c:['First thing in the morning, before food or drink, standing or on all fours.','Breathe all the air out through the mouth until the lungs are properly empty.','Now pull the navel up and in, under the ribcage, as if zipping into tight jeans.','Hold for twenty seconds without breathing in, then release slowly.'],
+ a:'Just sucking your belly in with a full chest of air. The exhale has to come first — that is what lets the wall draw in.'},
+
+roller:{n:'Foam roller extension',ms:4000,contact:null,vb:'13 30 74 45',props:{floor:68,roller:[30,52]},
+ f:[{th:0,sh:80,to:186,hd:200,up:-120,fo:30},{th:0,sh:80,to:176,hd:160,up:-125,fo:20}],
+ c:['Roller across the mid-back, knees bent, feet flat, hands cradling the head.','Pull the ribs down first so the arch happens in the upper back, not the lower.','Breathe out and drape backwards over the roller. Let gravity do it.','Five slow breaths, move the roller up two fingers, repeat in three positions.'],
+ a:'Arching from the lower back. If you feel it there, drop the hips and re-set the ribs.'},
+
+wallslide:{n:'Wall slide',ms:3400,contact:null,vb:'-7 7 94 86',props:{wall:1,floor:86},
+ f:[{th:100,sh:90,th2:80,sh2:90,to:-90,up:-160,fo:-100,up2:-20,fo2:-80},
+    {th:100,sh:90,th2:80,sh2:90,to:-90,up:-145,fo:-145,up2:-35,fo2:-35}],
+ c:['Back to the wall, feet a foot away from it, lower back gently flattened.','Arms in a goalpost shape — wrists, elbows and shoulders all touching the wall.','Slide the arms up into a Y, keeping every contact point on the wall.','Come back down slowly to the start. Ten reps is plenty.'],
+ a:'The lower back arching off the wall as the arms go up. That is the end of your range — stop there.'},
+
+latstretch:{n:'Lat stretch over a bench',ms:4000,contact:['kn',64,82],vb:'9 56 78 37',props:{floor:84,bench:[16,67,26,7]},
+ f:[{th:100,sh:180,ft:180,to:175,hd:130,up:186,fo:178},
+    {th:100,sh:180,ft:180,to:166,hd:122,up:202,fo:178}],
+ c:['Kneel with the elbows on a bench, hands together, thumbs toward the ceiling.','Push the hips back over the heels until the arms are straight overhead.','Let the chest sink toward the floor and breathe into the armpits.','Thirty seconds, three times. Tight lats are half the reason the mid-back will not open.'],
+ a:'Letting the lower back dip and the ribs flare. Keep the stomach lightly braced.'}
+};
+
+/* exercises without a demo still get cues */
+const CUES={
+splitsq:{n:'Split squat',c:['Long stance, back heel lifted, most of the weight through the front foot.','Drop straight down until the back knee is just off the floor.','Front shin stays roughly vertical, torso upright.','Push through the front heel to stand. All reps one leg, then swap.'],a:'Wobbling through the whole set. Hold a rack with one hand if you need to — better than a sloppy rep.'},
+pulldown:{n:'Lat pulldown',c:['Thighs locked under the pads, chest up, slight lean back.','Pull the elbows down toward your back pockets, not the bar to your chin.','Bar to the collarbone, squeeze for a beat.','Control the way up until the arms are fully long.'],a:'Leaning back to heave it down. If you are swinging, drop the weight.'},
+facepull:{n:'Face pull',c:['Rope set at eye height, palms facing each other.','Pull toward the forehead, splitting the rope as you go.','Elbows finish high and wide, shoulder blades pulled together.','Slow on the way back. This is a posture exercise, not a strength one.'],a:'Going heavy. Light weight, high reps, perfect position.'},
+incline:{n:'Incline dumbbell press',c:['Bench at about 30 degrees — any steeper and it becomes a shoulder press.','Feet flat, shoulder blades pinned back and down into the bench.','Lower to the upper chest with the elbows at 45 degrees.','Press up without clashing the dumbbells at the top.'],a:'Setting the bench too upright. Thirty degrees, no more.'},
+csrow:{n:'Chest-supported row',c:['Chest pinned to the pad the whole set — that is the point of the exercise.','Start by drawing the shoulder blades together.','Pull the elbows past the ribs, squeeze for a beat.','Let the arms straighten fully at the bottom.'],a:'Peeling the chest off the pad to pull heavier. Keep it planted.'},
+swim:{n:'Swim intervals',c:['Two hundred metres easy to warm up, whatever stroke feels good.','Then alternate: fifty metres hard, fifty metres easy, without stopping.','Hard means you cannot hold a conversation — around eight out of ten.','Two hundred metres easy at the end, and keep drinking after you get out.'],a:'Treating it as a long slow plod. The intervals are what make it worth the trip.'},
+walk:{n:'Brisk walk',c:['Fast enough that talking is slightly awkward, but not breathless.','Ribs stacked over hips, eyes up, arms swinging from the shoulder.','Outdoors beats the treadmill — you will go further without noticing.','Podcast or an audiobook, and take the long way home.'],a:'Nothing to avoid. This is the easiest win in the plan and the one most people skip.'}
+};
+
+/* ============ renderer ============ */
+function drawFigure(J,pr){
+  const s=[];
+  const F=pr.floor;
+  if(F) s.push(`<line x1="2" y1="${F}" x2="98" y2="${F}" stroke="#1E7E76" stroke-width="1.5"/>`);
+  if(pr.wall) s.push(`<rect x="0" y="0" width="26" height="100" fill="rgba(63,207,182,.07)"/><line x1="26" y1="0" x2="26" y2="100" stroke="#1E7E76" stroke-width="1.5"/>`);
+  if(pr.bench){const b=pr.bench;s.push(`<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" rx="2" fill="#12484F" stroke="#1E7E76" stroke-width="1.2"/>`);}
+  if(pr.seat){const b=pr.seat;s.push(`<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" rx="2" fill="#12484F" stroke="#1E7E76" stroke-width="1.2"/>`);}
+  if(pr.bar) s.push(`<line x1="18" y1="${pr.bar}" x2="82" y2="${pr.bar}" stroke="#1E7E76" stroke-width="3" stroke-linecap="round"/>`);
+  if(pr.roller){const r=pr.roller;s.push(`<circle cx="${r[0]}" cy="${r[1]}" r="7" fill="none" stroke="#1E7E76" stroke-width="2"/>`);}
+  if(pr.cable){const c=pr.cable;s.push(`<line x1="${c[0]}" y1="${c[1]}" x2="${J.wr[0].toFixed(1)}" y2="${J.wr[1].toFixed(1)}" stroke="#1E7E76" stroke-width="1.4" stroke-dasharray="3 3"/><circle cx="${c[0]}" cy="${c[1]}" r="2.5" fill="#1E7E76"/>`);}
+
+  /* far limbs, dimmer */
+  if(J.kn2) s.push(`<polyline points="${P(J.hip)} ${P(J.kn2)} ${P(J.an2)} ${P(J.tp2)}" fill="none" stroke="#1E7E76" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`);
+  if(J.el2) s.push(`<polyline points="${P(J.sh)} ${P(J.el2)} ${P(J.wr2)}" fill="none" stroke="#1E7E76" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>`);
+  if(pr.db2&&J.wr2) s.push(dumbbell(J.wr2,'#1E7E76'));
+
+  /* belly draw-in */
+  if(J.belly>0.01){
+    const dx=J.hip[0]-J.sh[0], dy=J.hip[1]-J.sh[1], L=Math.hypot(dx,dy);
+    const nx=dy/L, ny=-dx/L;
+    const a=[J.sh[0]+nx*3.5+dx*.20, J.sh[1]+ny*3.5+dy*.20];
+    const b=[J.hip[0]+nx*2.5, J.hip[1]+ny*2.5];
+    const bulge=8-J.belly*13;
+    const m=[(a[0]+b[0])/2+nx*bulge,(a[1]+b[1])/2+ny*bulge];
+    s.push(`<path d="M${P(a)} Q${P(m)} ${P(b)}" fill="none" stroke="#E8A33D" stroke-width="2.6" stroke-linecap="round" opacity="${.45+J.belly*.55}"/>`);
+    if(J.belly>.4){
+      s.push(`<path d="M${(m[0]-nx*2).toFixed(1)},${(m[1]-ny*2).toFixed(1)} l${(nx*5).toFixed(1)},${(ny*5).toFixed(1)}" stroke="#E8A33D" stroke-width="1.4" stroke-linecap="round" opacity="${J.belly}"/>`);
+    }
+  }
+
+  /* near body */
+  s.push(`<polyline points="${P(J.hip)} ${P(J.kn)} ${P(J.an)} ${P(J.tp)}" fill="none" stroke="#E9F5F2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`);
+  s.push(`<line x1="${J.hip[0].toFixed(1)}" y1="${J.hip[1].toFixed(1)}" x2="${J.sh[0].toFixed(1)}" y2="${J.sh[1].toFixed(1)}" stroke="#E9F5F2" stroke-width="3.4" stroke-linecap="round"/>`);
+  s.push(`<polyline points="${P(J.sh)} ${P(J.el)} ${P(J.wr)}" fill="none" stroke="#3FCFB6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>`);
+  s.push(`<circle cx="${J.hd[0].toFixed(1)}" cy="${J.hd[1].toFixed(1)}" r="${SEG.hr}" fill="none" stroke="#E9F5F2" stroke-width="2.6"/>`);
+  if(pr.db) s.push(dumbbell(J.wr,'#3FCFB6'));
+  if(pr.kb) s.push(`<circle cx="${J.wr[0].toFixed(1)}" cy="${(J.wr[1]+3).toFixed(1)}" r="4.5" fill="none" stroke="#E8A33D" stroke-width="2.2"/>`);
+  return s.join('');
+}
+function dumbbell(p,col){
+  return `<g stroke="${col}" stroke-width="2.4" stroke-linecap="round"><line x1="${(p[0]-4).toFixed(1)}" y1="${(p[1]-2).toFixed(1)}" x2="${(p[0]-4).toFixed(1)}" y2="${(p[1]+2).toFixed(1)}"/><line x1="${(p[0]+4).toFixed(1)}" y1="${(p[1]-2).toFixed(1)}" x2="${(p[0]+4).toFixed(1)}" y2="${(p[1]+2).toFixed(1)}"/><line x1="${(p[0]-4).toFixed(1)}" y1="${p[1].toFixed(1)}" x2="${(p[0]+4).toFixed(1)}" y2="${p[1].toFixed(1)}"/></g>`;
+}
+
+const REDUCED=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const live=new Set();
+function frameFor(ex,t){
+  const n=ex.f.length;
+  let u=t*2; if(u>1) u=2-u;
+  u=u*u*(3-2*u);
+  const pos=u*(n-1), i=Math.min(Math.floor(pos),n-2);
+  return blend(ex.f[i],ex.f[i+1],pos-i);
+}
+function paint(node){
+  const ex=LIB[node.dataset.ex];
+  const t=((performance.now()/ex.ms)%1);
+  const J=snap(solve(frameFor(ex,t)),ex.contact);
+  node.innerHTML=drawFigure(J,ex.props||{});
+}
+function paintStatic(node){
+  const ex=LIB[node.dataset.ex];
+  const a=snap(solve(ex.f[0]),ex.contact), b=snap(solve(ex.f[ex.f.length-1]),ex.contact);
+  node.innerHTML=`<g opacity=".32">${drawFigure(a,ex.props||{})}</g><g>${drawFigure(b,{})}</g>`;
+}
+function tick(){ live.forEach(paint); requestAnimationFrame(tick); }
+if(!REDUCED) requestAnimationFrame(tick);
+
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting) live.add(e.target); else live.delete(e.target);
+}),{rootMargin:'80px'});
+
+function mountDemo(host,key){
+  if(host.dataset.mounted) return;
+  host.dataset.mounted='1';
+  const ex=LIB[key];
+  host.innerHTML=`<div class="demo"><span class="demo-tag">${REDUCED?'start → finish':'loop'}</span>
+    <svg viewBox="${ex.vb||'0 0 100 100'}" data-ex="${key}" role="img" aria-label="Animated demonstration of ${ex.n}"></svg></div>`;
+  const svg=host.querySelector('svg');
+  if(REDUCED){ paintStatic(svg); } else { paint(svg); io.observe(svg); }
+}
+
+/* ============ plan data ============ */
+const DAILY=[
+ {id:'vac',t:'Stomach vacuums',s:'Before breakfast, empty stomach. 3 × 20 seconds.'},
+ {id:'h2o',t:'Water, roughly 3 litres',s:'Six pint glasses. Two before you leave the house.'},
+ {id:'stp',t:'9–10,000 steps',s:'The single biggest lever, and it doesn\u2019t spike hunger.'},
+ {id:'slt',t:'Salt low all day',s:'No processed food, no sauces, nothing added at the table.'}
+];
+
+/* [name, dose, demoKey or cueKey] */
+const DAYS=[
+{n:1,date:'2026-08-11',dow:'Tue 11 Aug',title:'Full body + posture reset',
+ b:[{h:'Lift',e:[['Goblet squat','3 × 10','squat'],['Dumbbell bench press','3 × 10','bench'],['Seated cable row','3 × 12','row'],['Romanian deadlift','3 × 10','rdl'],["Farmer's carry",'3 × 40 m','carry']]},
+    {h:'Thoracic block',e:[['Foam roller extension','3 × 5 breaths','roller'],['Lat stretch','3 × 30 s','latstretch'],['Wall slides','2 × 10','wallslide']]}],
+ note:'Set the tone. Moderate weights, short rests, two reps left in the tank on everything.'},
+
+{n:2,date:'2026-08-12',dow:'Wed 12 Aug',title:'Pool + core',
+ b:[{h:'Swim · 30 min',e:[['Easy warm-up','400 m','swim'],['50 m hard / 50 m easy','10 × 50','swim'],['Easy cool-down','200 m','swim']]},
+    {h:'Poolside core',e:[['Dead bug','3 × 10 each side','deadbug'],['Side plank','3 × 30 s','sideplank'],['Pallof press','3 × 12 each side','pallof']]}],
+ note:'Swimming gives you the deficit without the appetite spike. Don\u2019t reward it with a big lunch.'},
+
+{n:3,date:'2026-08-13',dow:'Thu 13 Aug',title:'Lower + pull',
+ b:[{h:'Lift',e:[['Split squat','3 × 10 each leg','splitsq'],['Hip thrust','3 × 12','hipthrust'],['Lat pulldown','3 × 10','pulldown'],['Chest-supported row','3 × 12','csrow'],['Pallof press','3 × 12 each side','pallof']]},
+    {h:'Thoracic block',e:[['Foam roller extension','3 × 5 breaths','roller'],['Wall slides','2 × 10','wallslide']]}],
+ note:'Rest 60–75 seconds. If you\u2019re not slightly out of breath between sets, you\u2019re resting too long.'},
+
+{n:4,date:'2026-08-14',dow:'Fri 14 Aug',title:'Walk only — no gym',
+ b:[{h:'Move',e:[['Brisk walk','45–60 min','walk'],['Lat stretch','3 × 30 s','latstretch'],['Foam roller extension','3 × 5 breaths','roller']]}],
+ note:'A proper recovery day. One brisk hour covers most of the step target on its own.'},
+
+{n:5,date:'2026-08-15',dow:'Sat 15 Aug',title:'Upper + core',
+ b:[{h:'Lift',e:[['Incline dumbbell press','3 × 10','incline'],['Dumbbell shoulder press','3 × 10','press'],['Chest-supported row','3 × 12','csrow'],['Face pull','3 × 15','facepull'],['Hanging knee raise','3 × 10','kneeraise']]},
+    {h:'Core finisher',e:[['Side plank','3 × 40 s','sideplank'],['Dead bug','3 × 10 each side','deadbug']]}],
+ note:'Face pulls and rows are doing waist work here too — they pull you upright.'},
+
+{n:6,date:'2026-08-16',dow:'Sun 16 Aug',title:'Pool + long walk',
+ b:[{h:'Swim · 30 min',e:[['Steady easy–moderate','800 m','swim'],['25 m hard','8 × 25','swim']]},
+    {h:'Later',e:[['Long walk','60 min','walk'],['Foam roller extension','3 × 5 breaths','roller']]}],
+ note:'Highest step day of the block. A sauna is fine but won\u2019t burn fat — drink after it, not less.'},
+
+{n:7,date:'2026-08-17',dow:'Mon 17 Aug',title:'Density full body',
+ b:[{h:'3 rounds · 60 s rest',e:[['A1 Goblet squat','12','squat'],['A2 Press-up','12','pushup'],['B1 Romanian deadlift','12','rdl'],['B2 Seated cable row','12','row'],["C1 Farmer's carry",'40 m','carry'],['C2 Pallof press','12 each side','pallof']]}],
+ note:'Supersets, minimal faffing. Same work as a normal session in two-thirds of the time.'},
+
+{n:8,date:'2026-08-18',dow:'Tue 18 Aug',title:'Pool + core · de-bloat starts',
+ b:[{h:'Swim · 30 min',e:[['50 m hard / 50 m easy','12 × 50','swim'],['Easy cool-down','200 m','swim']]},
+    {h:'Core',e:[['Dead bug','3 × 12 each side','deadbug'],['Side plank','3 × 40 s','sideplank'],['Pallof press','3 × 12 each side','pallof']]}],
+ note:'From tonight, switch to the last-72-hours rules below. Cooked veg, no fizz, no beer.'},
+
+{n:9,date:'2026-08-19',dow:'Wed 19 Aug',title:'Full body, moderate',
+ b:[{h:'Lift — drop a set',e:[['Goblet squat','2 × 12','squat'],['Dumbbell bench press','2 × 12','bench'],['Seated cable row','2 × 12','row'],['Romanian deadlift','2 × 12','rdl'],["Farmer's carry",'2 × 40 m','carry']]},
+    {h:'Thoracic block',e:[['Foam roller extension','3 × 5 breaths','roller'],['Lat stretch','3 × 30 s','latstretch'],['Wall slides','2 × 10','wallslide']]}],
+ note:'Last time you touch a weight. Nothing to failure — you want the abdominal wall calm, not swollen.'},
+
+{n:10,date:'2026-08-20',dow:'Thu 20 Aug',title:'Wind down',
+ b:[{h:'Move',e:[['Easy walk','45 min','walk'],['Foam roller extension','3 × 5 breaths','roller'],['Wall slides','2 × 10','wallslide'],['Stomach vacuum','3 × 20 s','vacuum']]}],
+ note:'Light food, high water, early night. Pack tonight so tomorrow isn\u2019t a stress day.'}
+];
+
+/* ============ storage ============ */
+const KEY='ten-lengths-v2';
+let state={four:{},done:{}}, memOnly=false;
+async function load(){
+  try{const r=await window.storage.get(KEY); if(r&&r.value) state=JSON.parse(r.value);}catch(e){}
+  state.four=state.four||{}; state.done=state.done||{};
+}
+async function save(){ if(memOnly)return; try{await window.storage.set(KEY,JSON.stringify(state));}catch(e){memOnly=true;} }
+
+/* ============ render ============ */
+const todayISO=new Date().toISOString().slice(0,10);
+const TICK='<svg viewBox="0 0 12 12" fill="none"><path d="M1.5 6.2 L4.5 9.2 L10.5 2.8" stroke="#07242A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+function detail(key){
+  const d=LIB[key]||CUES[key]; if(!d) return '';
+  const demo=LIB[key]?`<div class="demo-host" data-key="${key}"></div>`:'';
+  return `<div class="ex-detail">${demo}<ol class="cues">${d.c.map(x=>`<li>${x}</li>`).join('')}</ol>
+    <p class="avoid"><b>Avoid</b> — ${d.a}</p></div>`;
+}
+function renderFour(){
+  document.getElementById('four').innerHTML=DAILY.map(d=>`
+   <label class="chk"><input type="checkbox" data-four="${d.id}" ${state.four[d.id]?'checked':''}>
+   <span class="box">${TICK}</span>
+   <span class="chk-txt"><b>${d.t}</b><small>${d.s}</small></span></label>`).join('');
+}
+function renderDays(){
+  document.getElementById('days').innerHTML=DAYS.map(d=>{
+    const isToday=d.date===todayISO, done=!!state.done[d.n];
+    const blocks=d.b.map(b=>`<div class="blk"><h4>${b.h}</h4>${b.e.map(e=>`
+      <div class="ex" data-key="${e[2]}">
+        <button class="ex-btn"><span class="ex-name">${e[0]}</span><span class="ex-dose">${e[1]}</span><span class="ex-i">?</span></button>
+        ${detail(e[2])}
+      </div>`).join('')}</div>`).join('');
+    return `<article class="day${isToday?' is-today open':''}${done?' done':''}" data-day="${d.n}">
+      <button class="day-btn" aria-expanded="${isToday}">
+        <span class="day-n">${String(d.n).padStart(2,'0')}</span>
+        <span class="day-info"><span class="d">${d.dow}${isToday?' · today':''}</span><span class="t">${d.title}</span></span>
+        <span class="caret" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 5 L7 9 L11 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
+      <div class="day-body">${blocks}<p class="note">${d.note}</p>
+        <button class="mark">${done?'Done ✓':'Mark day done'}</button></div>
+    </article>`;
+  }).join('');
+}
+function renderThoracic(){
+  const keys=['roller','wallslide','latstretch'];
+  document.getElementById('thoracic').innerHTML=
+    `<h3 style="font-size:19px;margin-bottom:2px">The ten-minute block</h3>
+     <p style="color:var(--muted);font-size:14px;margin:0 0 4px">After every gym session and on the walking days. This is the part that shows up in photographs.</p>`+
+    keys.map(k=>`<div class="ex" data-key="${k}">
+      <button class="ex-btn"><span class="ex-name">${LIB[k].n}</span>
+      <span class="ex-dose">${k==='roller'?'3 × 5 breaths':k==='wallslide'?'2 × 10':'3 × 30 s'}</span><span class="ex-i">?</span></button>
+      ${detail(k)}</div>`).join('');
+}
+function renderLane(){
+  const lane=document.getElementById('lane');
+  lane.querySelectorAll('.seg').forEach(s=>s.remove());
+  const f=document.createDocumentFragment();
+  DAYS.forEach(d=>{const s=document.createElement('div');
+    s.className='seg'+(state.done[d.n]?' done':'')+(d.date===todayISO?' today':'');f.appendChild(s);});
+  lane.insertBefore(f,lane.firstChild);
+  document.getElementById('left').textContent=DAYS.length-DAYS.filter(d=>state.done[d.n]).length;
+}
+
+/* ============ events ============ */
+document.addEventListener('change',e=>{
+  const cb=e.target.closest('input[data-four]'); if(!cb)return;
+  state.four[cb.dataset.four]=cb.checked; save();
+});
+document.addEventListener('click',e=>{
+  const exb=e.target.closest('.ex-btn');
+  if(exb){
+    const ex=exb.closest('.ex'), open=ex.classList.toggle('open');
+    if(open){ const h=ex.querySelector('.demo-host'); if(h) mountDemo(h,ex.dataset.key); }
+    return;
+  }
+  const db=e.target.closest('.day-btn');
+  if(db){ const a=db.closest('.day'); db.setAttribute('aria-expanded',a.classList.toggle('open')); return; }
+  const mk=e.target.closest('.mark');
+  if(mk){
+    const a=mk.closest('.day'), n=a.dataset.day;
+    state.done[n]=!state.done[n];
+    a.classList.toggle('done',state.done[n]);
+    mk.textContent=state.done[n]?'Done ✓':'Mark day done';
+    renderLane(); save();
+  }
+});
+document.getElementById('reset').addEventListener('click',()=>{
+  state={four:{},done:{}}; save(); renderFour(); renderDays(); renderThoracic(); renderLane();
+});
+
+/* ============ boot ============ */
+(async function(){ await load(); renderFour(); renderDays(); renderThoracic(); renderLane(); })();
+</script>
+</body>
+</html>
